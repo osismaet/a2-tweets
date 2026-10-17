@@ -19,6 +19,57 @@ function parseTweets(runkeeper_tweets) {
 	firstDateSpan.innerText = (new Date(Math.min.apply(null, times)).toLocaleDateString('en-US', options));
 	var lastDateSpan = document.getElementById("lastDate");
 	lastDateSpan.innerText = (new Date(Math.max.apply(null, times)).toLocaleDateString('en-US', options));
+
+		function countSource(src) {
+		return tweet_array.filter(function(t) { return t.source === src; }).length;
+	}
+
+	var completedNumber = tweet_array.filter(function(t) { return t.source === "completed_event"; }).length;
+	var completedPct = math.format((completedNumber / tweet_array.length) * 100, {notation: 'fixed', precision: 2}) + '%';
+	var liveNumber = tweet_array.filter(function(t) { return t.source === "live_event"; }).length;
+	var livePct = math.format((liveNumber / tweet_array.length) * 100, {notation: 'fixed', precision: 2}) + '%';
+	var achievementNumber = tweet_array.filter(function(t) { return t.source === "achievement"; }).length;
+	var achievementPct = math.format((achievementNumber / tweet_array.length) * 100, {notation: 'fixed', precision: 2}) + '%';
+	var miscNumber = tweet_array.filter(function(t) { return t.source === "miscellaneous"; }).length;;
+	var miscPct = math.format((miscNumber / tweet_array.length) * 100, {notation: 'fixed', precision: 2}) + '%';
+	
+	var completedSpans = document.getElementsByClassName("completedEvents");
+	for (var i = 0; i < completedSpans.length; i++) {
+		completedSpans[i].innerText = completedNumber;
+		}
+	var	completedPctSpans = document.getElementsByClassName("completedEventsPct");
+	for (var i = 0; i < completedPctSpans.length; i++) {
+		completedPctSpans[i].innerText = completedPct;
+		}
+
+	var liveSpans = document.getElementsByClassName("liveEvents");
+	for (var i = 0; i < liveSpans.length; i++) {
+		liveSpans[i].innerText = liveNumber;
+		}
+	var	livePctSpans = document.getElementsByClassName("liveEventsPct");
+	for (var i = 0; i < livePctSpans.length; i++) {
+		livePctSpans[i].innerText = livePct;
+		}
+
+	var achievementSpans = document.getElementsByClassName("achievements");
+	for (var i = 0; i < achievementSpans.length; i++) {
+		achievementSpans[i].innerText = achievementNumber;
+		}
+	var	achievementPctSpans = document.getElementsByClassName("achievementsPct");
+	for (var i = 0; i < achievementPctSpans.length; i++) {
+		achievementPctSpans[i].innerText = achievementPct;
+		}
+	
+	var miscSpans = document.getElementsByClassName("miscellaneous");
+	for (var i = 0; i < miscSpans.length; i++) {
+		miscSpans[i].innerText = miscNumber;
+		}
+	var	miscPctSpans = document.getElementsByClassName("miscellaneousPct");
+	for (var i = 0; i < miscPctSpans.length; i++) {
+		miscPctSpans[i].innerText = miscPct;
+		}
+	
+
 }
 
 //Wait for the DOM to load
