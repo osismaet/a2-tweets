@@ -20,9 +20,6 @@ function parseTweets(runkeeper_tweets) {
 	var lastDateSpan = document.getElementById("lastDate");
 	lastDateSpan.innerText = (new Date(Math.max.apply(null, times)).toLocaleDateString('en-US', options));
 
-		function countSource(src) {
-		return tweet_array.filter(function(t) { return t.source === src; }).length;
-	}
 
 	var completedNumber = tweet_array.filter(function(t) { return t.source === "completed_event"; }).length;
 	var completedPct = math.format((completedNumber / tweet_array.length) * 100, {notation: 'fixed', precision: 2}) + '%';
@@ -68,8 +65,19 @@ function parseTweets(runkeeper_tweets) {
 	for (var i = 0; i < miscPctSpans.length; i++) {
 		miscPctSpans[i].innerText = miscPct;
 		}
-	
 
+
+	var writtenNumber = tweet_array.filter(function(t) { return t.source === "completed_event" && t.written; }).length;
+	var writtenPct = math.format((writtenNumber / completedNumber) * 100, {notation: 'fixed', precision: 2}) + '%';
+
+	var writtenSpans = document.getElementsByClassName("written");
+	for (var i = 0; i < writtenSpans.length; i++) {
+		writtenSpans[i].innerText = writtenNumber;
+		}
+	var	writtenPctSpans = document.getElementsByClassName("writtenPct");
+	for (var i = 0; i < writtenPctSpans.length; i++) {
+		writtenPctSpans[i].innerText = writtenPct;
+		}
 }
 
 //Wait for the DOM to load
