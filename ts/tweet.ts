@@ -10,21 +10,61 @@ class Tweet {
 	//returns either 'live_event', 'achievement', 'completed_event', or 'miscellaneous'
     get source():string {
         //TODO: identify whether the source is a live event, an achievement, a completed event, or miscellaneous.
-        return "unknown";
+        const t = this.text.toLowerCase();
+        
+        if (t.includes("right now") || t.includes("live") || t.includes("watch")) {
+            return "live_event";
+        }
+        if (t.includes("achieved") || t.includes("set a goal")) {
+            return "achievement";
+        }
+        if (t.startsWith("just completed") || t.startsWith("just posted")) {
+            return "completed_event";
+        }
+        
+        return "miscellaneous";
     }
 
     //returns a boolean, whether the text includes any content written by the person tweeting.
     get written():boolean {
         //TODO: identify whether the tweet is written
-        return false;
+        const trimmedText = this.text
+            .replace(/https?:\/\/\S+/g, "")
+            .replace(/#runkeeper/gi, "")
+            .replace(/\s+/g, " ")
+            .trim();
+        const idx = trimmedText.indexOf(" - ");
+        if (idx < 0) {
+            return false;
+        }
+        const finalText = trimmedText
+            .slice(idx + 3)
+            .replace(/\s*check it out!?$/i, "")
+            .trim();
+
+        if (finalText === "" || finalText.toLowerCase() === "tomtom mysports watch") {
+            return false;
+        }
+        return true;
     }
 
     get writtenText():string {
-        if(!this.written) {
+        if (!this.written) {
             return "";
         }
+        const trimmedText = this.text
+            .replace(/https?:\/\/\S+/g, "")
+            .replace(/#runkeeper/gi, "")
+            .replace(/\s+/g, " ")
+            .trim();
+      
+        const finalText = trimmedText
+            .slice(trimmedText.indexOf(" - ") + 3)
+            .replace(/\s*check it out!?$/i, "")
+            .trim();
+
         //TODO: parse the written text from the tweet
-        return "";
+        return finalText;
     }
 
     get activityType():string {
