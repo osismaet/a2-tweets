@@ -72,7 +72,12 @@ class Tweet {
             return "unknown";
         }
         //TODO: parse the activity type from the text of the tweet
-        return "";
+        let activity = this.text.match(/(?:completed|posted) an? ([\d.]+) ?(km|mi)\b (.+?)(?: in \d| with| -|\.|$)/i);
+        if (activity) {
+            return activity[3].trim().toLowerCase();
+        }
+        activity = this.text.match(/(?:completed|posted) an? (?:[\d:]+ ?(?:min|hr)?s? )?(.+?)(?: in \d| with| -|\.|$)/i);
+        return activity ? activity[1].trim().toLowerCase() : "unknown";
     }
 
     get distance():number {
@@ -80,7 +85,12 @@ class Tweet {
             return 0;
         }
         //TODO: prase the distance from the text of the tweet
-        return 0;
+        const dist = this.text.match(/(?:completed|posted) an? ([\d.]+) ?(km|mi)\b/i);
+        if (!dist) {
+            return 0;
+        }
+        const value = parseFloat(dist[1]);
+        return dist[2].toLowerCase() === "km" ? value / 1.609 : value;
     }
 
     getHTMLTableRow(rowNumber:number):string {
